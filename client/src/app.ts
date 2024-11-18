@@ -5,4 +5,6 @@ canvas.width = window.outerWidth;
 canvas.height = window.outerHeight;
 const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
-Helpers.drawGrid(ctx, 80, 80, 3, 3);
+Helpers.drawGrid(ctx, 3, 3);
+Helpers.drawEntity(ctx, "infantry.png", 2, 1);
+Helpers.drawEntity(ctx, "tower.png", 1, 0);
