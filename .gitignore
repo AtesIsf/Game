@@ -1,2 +1,2 @@
-./client/target/
-./server/target/
+client/target/*
+server/target/*
