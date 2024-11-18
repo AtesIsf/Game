@@ -1,5 +1,5 @@
 if [[ $1 == "-c" ]]; then
-	tsc src/*.ts --outDir target/
+	tsc
 fi
 
 python -m http.server 8080

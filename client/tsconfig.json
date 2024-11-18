@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es6", // Use ECMAScript modules for browser compatibility
+    "outDir": "./target", // Adjust as needed
+    "rootDir": "./src", // Adjust as needed
+    "strict": true
+  }
+}
