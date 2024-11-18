@@ -25,8 +25,8 @@ export namespace Helpers {
 	function gridToAbsCoord(x: number, y: number) {
 		const delta = sideLen * magicRatio;
 
-		let absX = gridStartMargin + x * delta - sideLen / 2;
-		absX = x % 2 == 0 ? absX : absX + 2 * delta;
+		let absX = gridStartMargin + (x - 1) * delta - sideLen / 2;
+		absX = x % 2 == 0 ? absX + 2 * delta : absX;
 
 		const absY = gridStartMargin + y * delta * magicYRatio + sideLen;
 
@@ -52,7 +52,7 @@ export namespace Helpers {
 		const delta = sideLen * magicRatio; 
 
 		for (let i = 0; i < row; i++) {
-			x = i % 2 == 0 ? gridStartMargin : gridStartMargin + delta;
+			x = i % 2 == 0 ? gridStartMargin + delta : gridStartMargin;
 			for (let j = 0; j < col; j++) {
 				drawHexagon(ctx, x, y);
 				x += 2 * delta;
