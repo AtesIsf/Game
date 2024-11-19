@@ -1,4 +1,5 @@
 import {Helpers} from "./helpers.js";
+import {Entity} from "./entity.js";
 
 const canvas = document.getElementById("game") as HTMLCanvasElement;
 canvas.width = window.outerWidth;
@@ -8,6 +9,15 @@ const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 ctx.imageSmoothingEnabled = true;
 ctx.imageSmoothingQuality = "high";1
 
-Helpers.drawGrid(ctx, 3, 3);
-Helpers.drawEntity(ctx, "infantry.png", 2, 1);
-Helpers.drawEntity(ctx, "tower.png", 1, 0);
+Helpers.drawGrid(ctx, 10, 10);
+
+let e = new Entity("infantry", 2, 1);
+
+window.onload = () => {
+	e.draw(ctx);
+}
+
+window.onclick = () => {
+	e.moveAnimation(ctx, 5, 8);
+}
+

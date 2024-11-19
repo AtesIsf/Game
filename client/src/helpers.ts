@@ -1,3 +1,5 @@
+import {Entity} from "./entity.js";
+
 export namespace Helpers {
 	export const gridStartMargin = 80;
 	const sideLen = 40;
@@ -33,10 +35,15 @@ export namespace Helpers {
 		return [absX, absY]
 	}
 
-	export function drawEntity(ctx: CanvasRenderingContext2D, filename: string, x: number, y: number) {
-		const arr = gridToAbsCoord(x, y);
-		const absX = arr[0];
-		const absY = arr[1];
+	export function drawEntity(ctx: CanvasRenderingContext2D, filename: string, x: number, y: number, asAbs: boolean) {
+		let absX = x;
+		let absY = y;
+
+		if (!asAbs) {
+			const arr = gridToAbsCoord(x, y);
+			absX = arr[0];
+			absY = arr[1];
+		}
 
 		// TODO: Find a better way to store images, maybe a sprite hashmap
 		const img = new Image();
@@ -59,5 +66,38 @@ export namespace Helpers {
 			}
 			y += magicYRatio * delta; // Magic ratio found by trial-error
 		}
+	}
+
+	// TODO: Fix this
+	export function animateMovement(ctx: CanvasRenderingContext2D, e: Entity, destX: number, destY: number) {
+		e.isMoving = true;
+
+		const absStart = gridToAbsCoord(e.x, e.y)
+		const startX = absStart[0];
+		const startY = absStart[1];
+
+		const absDest = gridToAbsCoord(destX, destY);
+		const deltaX = absDest[0] - startX;
+		const deltaY = absDest[1] - startY;
+		const startTime = performance.now();
+
+		function animate(time: DOMHighResTimeStamp) {
+			const elapsed = time - startTime;
+			const t = Math.min(elapsed / 1500, 1); // 1.5s
+
+			const tempX = startX + deltaX * t;
+			const tempY = startY + deltaY * t;
+
+			drawEntity(ctx, e.sprite, tempX, tempY, true);
+
+			if (t < 1) {
+				requestAnimationFrame(animate);
+			}
+			e.isMoving = false;
+			e.x = destX;
+			e.y = destY;
+		}
+
+		requestAnimationFrame(animate);
 	}
 }
