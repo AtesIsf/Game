@@ -1,16 +1,18 @@
 import {Helpers} from "./helpers.js";
 
+let idTracker = 0;
+
 export class Entity {
 	sprite: string;
 	x: number;
 	y: number;
-	isMoving: boolean;
+	id: number;
 
 	constructor(sprite: string, x: number, y: number) {
 		this.sprite = `${sprite}.png`;
 		this.x = x;
 		this.y = y;
-		this.isMoving = false;
+		this.id = idTracker++;
 	}
 
 	draw(ctx: CanvasRenderingContext2D) {

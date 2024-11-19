@@ -9,15 +9,17 @@ const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 ctx.imageSmoothingEnabled = true;
 ctx.imageSmoothingQuality = "high";1
 
-Helpers.drawGrid(ctx, 10, 10);
-
-let e = new Entity("infantry", 2, 1);
+Helpers.entities.push(new Entity("infantry", 2, 1));
+Helpers.entities.push(new Entity("tower", 1, 8));
 
 window.onload = () => {
-	e.draw(ctx);
+	Helpers.drawGrid(ctx);
+	Helpers.entities.forEach(e => {
+		e.draw(ctx)
+	});
 }
 
 window.onclick = () => {
-	e.moveAnimation(ctx, 5, 8);
+	Helpers.entities[0].moveAnimation(ctx, 5, 8);
 }
 

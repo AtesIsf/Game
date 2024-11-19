@@ -1,7 +1,10 @@
 import {Entity} from "./entity.js";
 
 export namespace Helpers {
+	export let entities: Entity[] = []; 
 	export const gridStartMargin = 80;
+	export const nRows = 10;
+	export const nCols = 10;
 	const sideLen = 40;
 	const magicRatio = 0.875; // Magic ratio found by trial-error
 	const magicYRatio = 1.7; // Magic ratio found by trial-error
@@ -53,14 +56,14 @@ export namespace Helpers {
 		};
 	}
 
-	export function drawGrid(ctx: CanvasRenderingContext2D, row: number, col: number) {
+	export function drawGrid(ctx: CanvasRenderingContext2D) {
 		let x: number;
 		let y = gridStartMargin;
 		const delta = sideLen * magicRatio; 
 
-		for (let i = 0; i < row; i++) {
+		for (let i = 0; i < nRows; i++) {
 			x = i % 2 == 0 ? gridStartMargin + delta : gridStartMargin;
-			for (let j = 0; j < col; j++) {
+			for (let j = 0; j < nCols; j++) {
 				drawHexagon(ctx, x, y);
 				x += 2 * delta;
 			}
@@ -70,8 +73,6 @@ export namespace Helpers {
 
 	// TODO: Fix this
 	export function animateMovement(ctx: CanvasRenderingContext2D, e: Entity, destX: number, destY: number) {
-		e.isMoving = true;
-
 		const absStart = gridToAbsCoord(e.x, e.y)
 		const startX = absStart[0];
 		const startY = absStart[1];
@@ -88,16 +89,22 @@ export namespace Helpers {
 			const tempX = startX + deltaX * t;
 			const tempY = startY + deltaY * t;
 
+			drawGrid(ctx);
+			entities.forEach(ent => {
+				if (ent.id != e.id) {
+					ent.draw(ctx);
+				}
+			})
+
 			drawEntity(ctx, e.sprite, tempX, tempY, true);
 
 			if (t < 1) {
 				requestAnimationFrame(animate);
 			}
-			e.isMoving = false;
-			e.x = destX;
-			e.y = destY;
 		}
 
 		requestAnimationFrame(animate);
+		e.x = destX;
+		e.y = destY;
 	}
 }
