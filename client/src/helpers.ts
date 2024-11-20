@@ -28,21 +28,20 @@ export namespace Helpers {
 	}
 
 	// Todo: Fix this
-	export function gridToAbsCoord(x: number, y: number) {
-		const delta = sideLen * magicRatio;
+	export function gridToAbsCoord(i: number, j: number) {
+		const hexWidth = sideLen / (Math.sqrt(3) / 2);
 
-		let absX = gridStartMargin + (x - 1) * delta - sideLen / 2;
-		absX = x % 2 == 0 ? absX + 2 * delta : absX;
+		const pivotX = i % 2 == 0 ? gridStartMargin : gridStartMargin - sideLen / 2;
+		const pivotY = gridStartMargin - sideLen / 2;
+		const buff = 10; // Can be anything really
 
-		const absY = gridStartMargin + y * delta * magicYRatio + sideLen;
-
-		return [absX, absY]
+		return [pivotX + i * hexWidth + buff, pivotY + j * sideLen + buff];
 	}
 
 	export function drawEntity(ctx: CanvasRenderingContext2D, img: HTMLImageElement, x: number, y: number) {
 		const abs = gridToAbsCoord(x, y);
 
-		ctx.drawImage(img, abs[0], abs[1], sideLen, sideLen);
+		ctx.drawImage(img, abs[1], abs[0], sideLen, sideLen);
 	}
 
 	function drawGrid(ctx: CanvasRenderingContext2D) {
