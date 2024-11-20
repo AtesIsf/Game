@@ -13,13 +13,10 @@ Helpers.entities.push(new Entity("infantry", 2, 1));
 Helpers.entities.push(new Entity("tower", 1, 8));
 
 window.onload = () => {
-	Helpers.drawGrid(ctx);
-	Helpers.entities.forEach(e => {
-		e.draw(ctx)
-	});
+	Helpers.draw(ctx);
 }
 
 window.onclick = () => {
-	Helpers.entities[0].moveAnimation(ctx, 5, 8);
+	Helpers.entities[0].moveTo(5, 8);
 }
 
