@@ -114,6 +114,13 @@ export namespace Helpers {
 		offsetX += speed[0] * speedMul;
 		offsetY += speed[1] * speedMul;
 
+		offsetX = Math.min(0, offsetX);
+		offsetX = Math.max(offsetX, -(nRows * hexWidth - window.innerWidth + 2 * gridStartMargin));
+
+		offsetY = Math.min(0, offsetY);
+		offsetY = Math.max(offsetY, -(nRows * sideLen * magicYRatio - window.innerHeight));
+
+		console.log(`${offsetX}-${offsetY}`)
 		requestAnimationFrame(handleMovement);
 	}
 
