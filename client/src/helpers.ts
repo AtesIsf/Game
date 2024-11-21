@@ -2,15 +2,17 @@ import {Entity} from "./entity.js";
 
 export namespace Helpers {
 	export let entities: Entity[] = []; 
+	
+	// Drawing stuff
 	export let gridStartMargin = 80;
-	export let nRows = 10;
-	export let nCols = 10;
-	let sideLen = 40;
+	export let nRows = 100;
+	export let nCols = 100;
 
 	const magicRatio = 0.875; // Magic ratio found by trial-error
 	const magicYRatio = 1.7; // Magic ratio found by trial-error
 
-	const hexWidth = sideLen * Math.sqrt(3);
+	let sideLen = 40;
+	let hexWidth = sideLen * Math.sqrt(3);
 
 	let hexCoords: Map<string, number[]> = new Map; // 2d array of tuples
 
@@ -18,6 +20,7 @@ export namespace Helpers {
 	let offsetX = 0;
 	let offsetY = 0;
 	let speed = [0, 0];
+	let speedMul = 1;
 
 	let keys = {
 		w: false,
@@ -29,36 +32,70 @@ export namespace Helpers {
 	export function setupInputs() {
 		window.onkeydown = (e) => {
 			switch (e.key) {
+				// Movement
+				case "W":
+					speedMul = 2;
 				case "w":
 					keys.w = true;
 					break;
+				case "A":
+					speedMul = 2;
 				case "a":
 					keys.a = true;
 					break;
+				case "S":
+					speedMul = 2;
 				case "s":
 					keys.s = true;
 					break;
+				case "D":
+					speedMul = 2;
 				case "d":
 					keys.d = true;
 					break;
+				// Zoom -> TODO: ADD OFFSET CORRECTION LATER
+				case "+":
+					if (sideLen < 70) {
+						sideLen += 5;
+						hexWidth = sideLen * Math.sqrt(3);
+					}
+					break;
+				case "-":
+					if (sideLen > 10) {
+						sideLen -= 5;
+						hexWidth = sideLen * Math.sqrt(3);
+					}
+					break;
+				case " ":
+					sideLen = 40;
+					hexWidth = sideLen * Math.sqrt(3);
+				break;
 			}	
 		};
 
 		window.onkeyup = (e) => {
 			switch (e.key) {
+				case "W":
 				case "w":
+					speedMul = 1;
 					keys.w = false;
 					speed[1] = 0;
 					break;
+				case "A":
 				case "a":
+					speedMul = 1;
 					keys.a = false;
 					speed[0] = 0;
 					break;
+				case "S":
 				case "s":
+					speedMul = 1;
 					keys.s = false;
 					speed[1] = 0;
 					break;
+				case "D":
 				case "d":
+					speedMul = 1;
 					keys.d = false;
 					speed[0] = 0;
 					break;
@@ -69,13 +106,13 @@ export namespace Helpers {
 	}
 
 	function handleMovement() {
-		offsetX += speed[0];
-		offsetY += speed[1];
-
 		if (keys.w) speed[1] = 10;
 		if (keys.s) speed[1] = -10;
 		if (keys.a) speed[0] = 10;
 		if (keys.d) speed[0] = -10;
+
+		offsetX += speed[0] * speedMul;
+		offsetY += speed[1] * speedMul;
 
 		requestAnimationFrame(handleMovement);
 	}
@@ -102,8 +139,8 @@ export namespace Helpers {
 		const abs = hexCoords.get(`${x}-${y}`);
 		if (abs == null)
 			return;
-		// + 15 is a buffer here to make kinda center sprites
-		ctx.drawImage(img, abs[0] + 15, abs[1], sideLen, sideLen);
+		// there is a buffer here to make kinda center sprites
+		ctx.drawImage(img, abs[0] + sideLen * 2 / 5, abs[1], sideLen, sideLen);
 	}
 
 	function drawGrid(ctx: CanvasRenderingContext2D) {

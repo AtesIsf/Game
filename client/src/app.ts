@@ -7,13 +7,12 @@ canvas.height = window.innerHeight;
 const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
 ctx.imageSmoothingEnabled = true;
-ctx.imageSmoothingQuality = "high";1
+ctx.imageSmoothingQuality = "high";
 
-Helpers.nRows = 20;
-Helpers.nCols = 20;
-
-Helpers.entities.push(new Entity("infantry", 18, 18));
-Helpers.entities.push(new Entity("tower", 9, 9));
+Helpers.entities.push(new Entity("infantry", 99, 99));
+Helpers.entities.push(new Entity("tower", 0, 0));
+Helpers.entities.push(new Entity("infantry", 99, 0));
+Helpers.entities.push(new Entity("tower", 0, 99));
 
 window.onload = () => {
 	Helpers.setupInputs();
