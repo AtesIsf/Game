@@ -5,13 +5,80 @@ export namespace Helpers {
 	export let gridStartMargin = 80;
 	export let nRows = 10;
 	export let nCols = 10;
-	const sideLen = 40;
+	let sideLen = 40;
+
 	const magicRatio = 0.875; // Magic ratio found by trial-error
 	const magicYRatio = 1.7; // Magic ratio found by trial-error
 
 	const hexWidth = sideLen * Math.sqrt(3);
 
 	let hexCoords: Map<string, number[]> = new Map; // 2d array of tuples
+
+	// Cam stuff
+	let offsetX = 0;
+	let offsetY = 0;
+	let speed = [0, 0];
+
+	let keys = {
+		w: false,
+		a: false,
+		s: false,
+		d: false
+	}
+
+	export function setupInputs() {
+		window.onkeydown = (e) => {
+			switch (e.key) {
+				case "w":
+					keys.w = true;
+					break;
+				case "a":
+					keys.a = true;
+					break;
+				case "s":
+					keys.s = true;
+					break;
+				case "d":
+					keys.d = true;
+					break;
+			}	
+		};
+
+		window.onkeyup = (e) => {
+			switch (e.key) {
+				case "w":
+					keys.w = false;
+					speed[1] = 0;
+					break;
+				case "a":
+					keys.a = false;
+					speed[0] = 0;
+					break;
+				case "s":
+					keys.s = false;
+					speed[1] = 0;
+					break;
+				case "d":
+					keys.d = false;
+					speed[0] = 0;
+					break;
+			}	
+		};
+
+		requestAnimationFrame(handleMovement);
+	}
+
+	function handleMovement() {
+		offsetX += speed[0];
+		offsetY += speed[1];
+
+		if (keys.w) speed[1] = 10;
+		if (keys.s) speed[1] = -10;
+		if (keys.a) speed[0] = 10;
+		if (keys.d) speed[0] = -10;
+
+		requestAnimationFrame(handleMovement);
+	}
 
 	// The center of the hexagon is (startX, startY), sideLen = 40
 	function drawHexagon(ctx: CanvasRenderingContext2D, startX: number, startY: number) {
@@ -57,10 +124,20 @@ export namespace Helpers {
 
 	export function draw(ctx: CanvasRenderingContext2D) {
 		function inner() {
+			ctx.fillStyle = "rgb(50, 50, 50)";
+			ctx.clearRect(0, 0, window.outerWidth, window.outerHeight);
+
+			ctx.save();
+
+			ctx.translate(offsetX, offsetY);
+
 			drawGrid(ctx);
 			entities.forEach(e => {
 				e.draw(ctx);
 			});
+
+			ctx.restore();
+
 			requestAnimationFrame(inner);
 		}
 		requestAnimationFrame(inner);
