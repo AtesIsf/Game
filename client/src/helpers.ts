@@ -2,12 +2,16 @@ import {Entity} from "./entity.js";
 
 export namespace Helpers {
 	export let entities: Entity[] = []; 
-	export const gridStartMargin = 80;
-	export const nRows = 10;
-	export const nCols = 10;
+	export let gridStartMargin = 80;
+	export let nRows = 10;
+	export let nCols = 10;
 	const sideLen = 40;
 	const magicRatio = 0.875; // Magic ratio found by trial-error
 	const magicYRatio = 1.7; // Magic ratio found by trial-error
+
+	const hexWidth = sideLen * Math.sqrt(3);
+
+	let hexCoords: Map<string, number[]> = new Map; // 2d array of tuples
 
 	// The center of the hexagon is (startX, startY), sideLen = 40
 	function drawHexagon(ctx: CanvasRenderingContext2D, startX: number, startY: number) {
@@ -27,21 +31,12 @@ export namespace Helpers {
 		ctx.fill();
 	}
 
-	// Todo: Fix this
-	export function gridToAbsCoord(i: number, j: number) {
-		const hexWidth = sideLen / (Math.sqrt(3) / 2);
-
-		const pivotX = i % 2 == 0 ? gridStartMargin : gridStartMargin - sideLen / 2;
-		const pivotY = gridStartMargin - sideLen / 2;
-		const buff = 10; // Can be anything really
-
-		return [pivotX + i * hexWidth + buff, pivotY + j * sideLen + buff];
-	}
-
 	export function drawEntity(ctx: CanvasRenderingContext2D, img: HTMLImageElement, x: number, y: number) {
-		const abs = gridToAbsCoord(x, y);
-
-		ctx.drawImage(img, abs[1], abs[0], sideLen, sideLen);
+		const abs = hexCoords.get(`${x}-${y}`);
+		if (abs == null)
+			return;
+		// + 15 is a buffer here to make kinda center sprites
+		ctx.drawImage(img, abs[0] + 15, abs[1], sideLen, sideLen);
 	}
 
 	function drawGrid(ctx: CanvasRenderingContext2D) {
@@ -53,6 +48,7 @@ export namespace Helpers {
 			x = i % 2 == 0 ? gridStartMargin + delta : gridStartMargin;
 			for (let j = 0; j < nCols; j++) {
 				drawHexagon(ctx, x, y);
+				hexCoords.set(`${i}-${j}`, [x - hexWidth / 2, y - sideLen / 2]);
 				x += 2 * delta;
 			}
 			y += magicYRatio * delta; // Magic ratio found by trial-error

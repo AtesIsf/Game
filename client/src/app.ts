@@ -9,14 +9,13 @@ const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 ctx.imageSmoothingEnabled = true;
 ctx.imageSmoothingQuality = "high";1
 
-Helpers.entities.push(new Entity("infantry", 2, 1));
-Helpers.entities.push(new Entity("tower", 1, 8));
+Helpers.nRows = 20;
+Helpers.nCols = 20;
+
+Helpers.entities.push(new Entity("infantry", 18, 18));
+Helpers.entities.push(new Entity("tower", 9, 9));
 
 window.onload = () => {
 	Helpers.draw(ctx);
-}
-
-window.onclick = () => {
-	Helpers.entities[0].moveTo(5, 8);
 }
 
