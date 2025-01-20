@@ -9,10 +9,10 @@ const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 ctx.imageSmoothingEnabled = true;
 ctx.imageSmoothingQuality = "high";
 
-Helpers.entities.push(new Entity("infantry", 99, 99));
+Helpers.entities.push(new Entity("infantry", 19, 19));
 Helpers.entities.push(new Entity("tower", 0, 0));
-Helpers.entities.push(new Entity("infantry", 99, 0));
-Helpers.entities.push(new Entity("tower", 0, 99));
+Helpers.entities.push(new Entity("infantry", 19, 0));
+Helpers.entities.push(new Entity("tower", 0, 19));
 
 window.onload = () => {
 	Helpers.setupInputs();

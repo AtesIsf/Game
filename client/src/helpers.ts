@@ -5,8 +5,8 @@ export namespace Helpers {
 	
 	// Drawing stuff
 	export let gridStartMargin = 80;
-	export let nRows = 100;
-	export let nCols = 100;
+	export let nRows = 20;
+	export let nCols = 20;
 
 	const magicRatio = 0.875; // Magic ratio found by trial-error
 	const magicYRatio = 1.7; // Magic ratio found by trial-error
@@ -113,7 +113,8 @@ export namespace Helpers {
 
 		offsetX += speed[0] * speedMul;
 		offsetY += speed[1] * speedMul;
-
+	
+		// This stuff works in reverse
 		offsetX = Math.min(0, offsetX);
 		offsetX = Math.max(offsetX, -(nRows * hexWidth - window.innerWidth + 2 * gridStartMargin));
 
